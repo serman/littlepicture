@@ -31,7 +31,7 @@ const showDropdown = ref(false)
             <button
               id="dropdown-button"
               @click.prevent="showDropdown = !showDropdown"
-              class="inline-flex justify-center w-full px-4 py-2 font-medium text-yellow-300 bg-transparent focus:outline-none uppercase"
+              class="inline-flex justify-center w-full  py-2 font-medium text-yellow-300 bg-transparent focus:outline-none uppercase"
             >
               {{city}}
               <svg
@@ -75,22 +75,22 @@ const showDropdown = ref(false)
           <span>1986-2085</span>
         </div>
       </div>
-      <div class="flex flex-col gap-12 mb-64">
+      <div class="flex flex-col gap-12 mb-96">
         <singleSineWave :number="parseInt(rowGrandma.value)">
-          <template #title> MY YOUNG GRANDMA </template>
-          <template #year> 2021 </template>
+          <template #title> When my mother was in her 20s </template>
+          <template #year> 1986 </template>
         </singleSineWave>
 
         <singleSineWave :number="parseInt(rowGrandson45.value)">
-          <template #title> MY YOUNG GRANDSON </template>
+          <template #title> When my grandaughter be in her 20s </template>
           <template #year> 2085 </template>
-          <template #scenario> SCENARIO: EMISIONS PEAKS AT 2040</template>
+          <template #scenario> SCENARIO: RCP4.5 EMISIONS PEAKS AT 2040</template>
         </singleSineWave>
 
         <singleSineWave :number="parseInt(rowGrandson85.value)">
-          <template #title> MY OLD GRANDSON </template>
+          <template #title>When my grandaughter be in her 20s </template>
           <template #year> 2085 </template>
-          <template #scenario> SCENARIO: BUSINESS AS USUAL</template>
+          <template #scenario> SCENARIO: RCP8.5 emissions keep growing</template>
         </singleSineWave>
       </div>
     </div>
