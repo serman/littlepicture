@@ -27,10 +27,10 @@ const sketch = (s) => {
     s.clear()
     theta += thetainc
     theta2 += theta2inc
-    s.fill(255)
+    
     // lets draw a sin wave
     s.noFill()
-    s.stroke(255, 255, 255, 128)
+    s.stroke(223,254,71,128)
     s.beginShape()
     const numberofWaves = props.number
     const waveheight = s.height * 0.8
@@ -65,13 +65,13 @@ let myp5 = new p5(sketch)
             {{ props.number }} days/year
             <div class="flex flex-row">
               <div
-                class="h-4 bg-yellow-300"
+                class="h-4 bg-white/80"
                 :style="{
                   width: props.number + 'px'
                 }"
               ></div>
               <div
-                class="h-4 bg-[#3C5451]"
+                class="h-4 bg-white/20"
                 :style="{
                   width: 365 - props.number + 'px'
                 }"
