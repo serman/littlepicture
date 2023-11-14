@@ -26,3 +26,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+*.nc
+procesnc/.Rproj.user/*
+procesnc/HWD_EU_health_rcp45_mean_v1.0.nc.aux.xml
+procesnc/HWD_EU_health_rcp85_mean_v1.0.nc.aux.xml
