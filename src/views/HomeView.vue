@@ -52,22 +52,22 @@ watch(
 
 <template>
   <div class="bg1">
-    <div class="container max-w-screen-xl mx-auto">
-      <div class="flex justify-between items-center gap-12">
+    <div class="container max-w-screen-xl mx-auto px-2">
+      <div class="flex justify-between items-center gap-12 mb-8 mt-4">
         <div class="inline-block">
-          <div class="text-8xl grow-0 text-white">HEATWAVES</div>
-          <div class="justify-between flex shrink font-bold text-2xl text-yellow-300">
+          <div class="text-8xl grow-0 text-white relative z-10">HEATWAVES</div>
+          <div class="justify-between flex shrink font-bold text-2xl text-yellow-300 -mt-4">
             <div class="relative inline-block text-left">
               <button
                 id="dropdown-button"
                 @click.prevent="showDropdown = !showDropdown"
-                class="inline-flex justify-center w-full py-2 font-medium text-yellow-300 bg-transparent focus:outline-none uppercase transition-all duration-700"
+                class="inline-flex bg-yellow-300 justify-center w-full pt-2 font-medium text-black bg-transparent focus:outline-none uppercase transition-all duration-700 border-b-2 border-dotted border-black hover:border-black "
                 :class="[status === 'loading' ? 'opacity-0' : 'opacity-100']"
               >
                 {{ city }}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 -mr-1"
+                  class="w-8 h-8 -mr-1"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"
@@ -94,28 +94,36 @@ watch(
                 >
                   <a
                     href="#"
-                    class="block px-4 py-2 mb-1 text-gray-700 hover:bg-yellow-300 text-3xl"
+                    class="block px-4 py-2 mb-1 text-gray-700 hover:bg-yellow-300 text-3xl "
                     role="menuitem"
-                    @click.prevent="
-                      city = _city;
-                      showDropdown = false
-                    "
-                    >{{ _city }}</a
+                    @click.prevent='city = _city;showDropdown = false'>
+                    {{ _city }}</a
                   >
                 </div>
               </div>
             </div>
-            <span>1986-2085</span>
+            <span class="inline-block mt-1  text-yellow-300 leading-8">1986-2085</span>
           </div>
         </div>
         <div>
-          <div class="max-w-2xl font-semibold text-white text-lg text-right">
+          <div class="max-w-xl font-semibold text-white text-lg text-right">
             <div>
-              It is estimated that heatwaves will become increasingly frequent in Europe. Compare
-              predictions across different emission scenarios.
+              <span> Due to climate change, heatwaves will become increasingly frequent in Europe.</span>
+              <br />
+              <br />
+              <span class="font-bold bg-yellow-300 text-black">
+                Next generations' well-being depends on our actions today. <br/>Every degree matters.
+              </span>
+
             </div>
-            <div class="inline-block">
-              <div class="flex justify-end gap-4 items-center text-sm bg-black/40 px-2 py-2 my-2">
+
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between">
+              <div
+                class="inline-flex justify-end gap-4 items-center text-sm font-bold bg-black/50 px-2 py-2 my-2 text-white"
+              >
                 <svg
                   width="41"
                   height="20"
@@ -131,30 +139,31 @@ watch(
                 </svg>
                 One wave represents one day of heatwave.
               </div>
+              <div class=" bg-black/50 px-2 py-2 my-2 text-white font-bold text-sm mb-2">
+                Choose <span class="bg-yellow-300 text-black font-bold"> city</span> and compare heatwave predictions across alternative emission scenarios.
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col gap-12 mb-96">
+      <div class="flex flex-col gap-3 mb-32">
         <Transition>
           <singleSineWave
             :number="parseInt(rowGrandma.value)"
             :maxWaves="maxWaves"
             v-if="status === 'displaying'"
           >
-            <template #title> When my mother was in her 20s </template>
+            <template #title> When <span class="bg-yellow-300 text-black">my mother</span> was in her twenties </template>
             <template #year> 1986 </template>
           </singleSineWave>
         </Transition>
         <Transition>
-          <singleSineWave
+          <singleSineWave 
+          class="mt-8"
             :number="parseInt(rowGrandson45.value)"
             :maxWaves="maxWaves"
             v-if="status === 'displaying'"
           >
-            <template #title> When my grandaughter be in her 20s </template>
-            <template #year> 2085 </template>
-            <template #scenario> SCENARIO: RCP4.5 EMISIONS PEAKS AT 2040</template>
+            <template #title> When <span class="bg-yellow-300 text-black">my grandaughter</span> will be in her twenties </template>
+            <template #year>  </template>
+            <template #scenario>  SCENARIO: <span class="bg-yellow-300 text-black"> RCP4.5 EMISIONS PEAKS AROUND 2040 </span></template>
           </singleSineWave>
         </Transition>
 
@@ -164,21 +173,24 @@ watch(
             :maxWaves="maxWaves"
             v-if="status === 'displaying'"
           >
-            <template #title>When my grandaughter be in her 20s </template>
+            <template #title> </template>
             <template #year> 2085 </template>
-            <template #scenario> SCENARIO: RCP8.5 emissions keep growing</template>
+            <template #scenario> SCENARIO: <span class="bg-yellow-300 text-black">  RCP8.5 emissions keep growing</span></template>
           </singleSineWave>
         </Transition>
         <Transition>
           <template v-if="status === 'loading'">
             <div class="mt-24">
-              <div class="w-full">
+              <div class="w-full h-screen">
                 <div
                   class="margin-auto text-center text-[300px] text-black text-bold uppercase opacity-40"
                 >
                   {{ city }}
                 </div>
-                <div data-title="dot-pulse" class="w-full flex justify-center text-center snippet -my-12">
+                <div
+                  data-title="dot-pulse"
+                  class="w-full flex justify-center text-center snippet -my-12"
+                >
                   <div class="text-center mt-8 text-white">loading</div>
                   <div class="stage text-center">
                     <div class="dot-pulse"></div>
@@ -188,8 +200,40 @@ watch(
             </div>
           </template>
         </Transition>
+   
       </div>
     </div>
+    <footer class="bg-black/60 text-white py-16 px-4">
+      
+      
+      <div class="max-w-screen-xl mx-auto">
+        <div class="mb-8  text-xl">
+          A <a  class="underline underline-offset-2 hover:text-yellow-400" href="https://en.wikipedia.org/wiki/Representative_Concentration_Pathway"> Representative Concentration Pathway (RCP) </a> is a greenhouse gas concentration (not emissions) trajectory adopted by the IPCC.
+
+          <ul class="mb-2 list-disc ml-5 pt-2">
+            <li>
+              RCP 4.5 is described by the IPCC as an intermediate scenario. Emissions in RCP 4.5 peak around 2040, then decline. 
+            </li>
+            <li>
+              In RCP 8.5 emissions continue to rise throughout the 21st century.
+            </li>
+          </ul>
+        </div>
+        <p class="mb-2">Data source: <a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-heat-and-cold-spells?tab=overview" target="_blank" class="underline underline-offset-2 hover:text-yellow-400">https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-heat-and-cold-spells?tab=overview</a>
+        </p>
+        
+        <p class="mb-2">Sergio Galán, (<a href="http://graphicmethod.studio" class="underline underline-offset-2 hover:text-yellow-400">The graphic Method</a>)  
+        </p>
+
+        <p>
+          Made for <a href="https://climate.esa.int/en/littlepicturescompetition/" class="underline underline-offset-2 hover:text-yellow-400"> little pictures competition</a> by ESA Climate Office.
+        </p>
+
+        <p>
+        </p>
+
+      </div>
+    </footer>
     <bgMap :city="city" @rotation-finished="status = 'displaying'" :status="status"></bgMap>
   </div>
 </template>
@@ -217,8 +261,8 @@ watch(
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #F2C94C;
-  color: #F2C94C;
+  background-color: #f2c94c;
+  color: #f2c94c;
   box-shadow: 9999px 0 0 -5px;
   animation: dot-pulse 1.5s infinite linear;
   animation-delay: 0.25s;
@@ -232,8 +276,8 @@ watch(
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #F2C94C;
-  color: #F2C94C;
+  background-color: #f2c94c;
+  color: #f2c94c;
 }
 .dot-pulse::before {
   box-shadow: 9984px 0 0 -5px;

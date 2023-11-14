@@ -36,7 +36,7 @@ const INITROTATION = Math.PI / 10
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 camera.rotation.x = -INITROTATION
-camera.rotation.z = -INITROTATION/2
+camera.rotation.z = -INITROTATION / 2
 camera.position.z = 5
 
 const renderer = new THREE.WebGLRenderer({
@@ -96,17 +96,17 @@ onMounted(() => {
       const step = 0.001
       cameraInitRotation += step
       camera.rotateZ(step)
-      camera.rotateX(step*2)
+      camera.rotateX(step * 2)
       camera.position.x = 2
       camera.position.y = 5 * Math.sin(cameraAngle / 5)
-      camera.position.z =  5+ 5*(  cameraInitRotation/INITROTATION ) + cameraAngle // distance
+      camera.position.z = 5 + 5 * (cameraInitRotation / INITROTATION) + cameraAngle // distance
       camera.lookAt(cameraAngle, cameraAngle, 0)
     } else {
       camera.position.y = 5 * Math.sin(cameraAngle / 5)
       camera.position.z = 10 + cameraAngle
       camera.lookAt(cameraAngle, cameraAngle, 0)
     }
-    if (cameraInitRotation*2 - INITROTATION  >= 0) {
+    if (cameraInitRotation * 2 - INITROTATION >= 0) {
       emits('rotationFinished')
     }
 
@@ -131,6 +131,16 @@ onMounted(() => {
 watch(
   () => props.city,
   (newValue, oldValue) => {
+
+
+    camera.rotation.x = -INITROTATION
+    camera.rotation.z = -INITROTATION / 2
+    camera.position.z = 5
+
+    cameraAngle = 0
+    cameraInitRotation = 0
+    cameraMoveUp = true
+
     console.log('city changed', newValue, oldValue)
     // remove old city texture and layer and load the new one:
     scene.remove(plane)

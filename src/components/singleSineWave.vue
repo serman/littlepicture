@@ -43,7 +43,8 @@ const sketch = (s) => {
     // lets draw a sin wave
     s.noFill()
     s.strokeWeight(1.5)
-    s.stroke(242, 201, 76, 192)
+   // s.stroke(242, 201, 76, 130) 
+   s.stroke('255','255','255',192)
     const numberofWaves = props.number
     const waveheight = s.height * 0.8
     const millis = s.millis()
@@ -88,25 +89,25 @@ watchEffect(() => {
   } else p5instance = new p5(sketch)
 })
 </script>
-
+dot-pulse
 <template>
   <div class="w-full">
-    <div class="bg-black/50 relative px-8 py-4 shadow-lg shadow-black/30 rounded-sm">
+    <div class="bg-black/60 relative px-8 py-4 shadow-lg shadow-black/30 rounded-sm">
       <div class="inner-content">
         <div class="flex justify-between w-full pb-4">
-          <div class="text-yellow-300 font-bold text-lg"><slot name="year"></slot></div>
-          <div class="uppercase"><slot name="title"> </slot></div>
+          <div class="text-white uppercase mt-5"><slot name="scenario"></slot></div>
+          <div class="uppercase text-white"><slot name="title"> </slot></div>
         </div>
         <div class="w-full" ref="canvasp5container">
           <canvas ref="canvasp5" class="w-full"> </canvas>
         </div>
 
-        <div class="flex justify-between w-full pt-4">
+        <div class="flex justify-between w-full pt-4 text-white">
           <div>
             {{ props.number }} days/year
-            <div class="flex flex-row">
+            <div class="flex flex-row mt-1">
               <div
-                class="h-4 bg-white/80"
+                class="h-4 bg-white"
                 :style="{
                   width: props.number + 'px'
                 }"
@@ -120,7 +121,7 @@ watchEffect(() => {
             </div>
           </div>
 
-          <div class="text-yellow-300 uppercase"><slot name="scenario"></slot></div>
+          <div class=" text-yellow-300 font-bold text-2xl"><slot name="year"></slot></div>
         </div>
       </div>
     </div>
