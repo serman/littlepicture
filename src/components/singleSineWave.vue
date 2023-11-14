@@ -89,7 +89,6 @@ watchEffect(() => {
   } else p5instance = new p5(sketch)
 })
 </script>
-dot-pulse
 <template>
   <div class="w-full">
     <div class="bg-black/60 relative px-8 py-4 shadow-lg shadow-black/30 rounded-sm">

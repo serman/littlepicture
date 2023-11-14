@@ -1,7 +1,7 @@
 <script setup>
 //https://anvaka.github.io/city-roads/?q=barcelona%2C&areaId=3600347950
 import * as THREE from 'three'
-import { onMounted, watch,ref } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import {
   BloomEffect,
   EffectComposer,
@@ -19,7 +19,8 @@ let geometry
 let texture
 let material
 let plane
-const isBGLoaded=ref(false)
+const fps = 30
+const isBGLoaded = ref(false)
 const props = defineProps({
   city: {
     type: String,
@@ -52,7 +53,7 @@ document.body.appendChild(renderer.domElement)
 
 geometry = new THREE.PlaneGeometry(20, 20)
 texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`, () => {
-  isBGLoaded.value=true
+  isBGLoaded.value = true
 })
 material = new THREE.MeshBasicMaterial({ map: texture, opacity: 0.9, transparent: true })
 
@@ -79,7 +80,7 @@ noiseEffect.blendMode.opacity.value = 1
 noiseEffect.blendMode.blendFunction = BlendFunction.MULTIPLY
 
 const loader = new THREE.TextureLoader()
-const bgTexture = loader.load('/Gradient.png')
+const bgTexture = loader.load('/Gradient.jpg')
 
 scene.background = bgTexture
 
@@ -92,17 +93,21 @@ composer.addPass(effectPass)
 
 onMounted(() => {
   function animate() {
-    requestAnimationFrame(animate)
+    setTimeout(function () {
+      requestAnimationFrame(animate)
+    }, 1000 / fps)
 
-    if (props.status === 'loading' && isBGLoaded.value===true) {
-      const step = 0.001
-      cameraInitRotation += step
-      camera.rotateZ(step)
-      camera.rotateX(step * 2)
-      camera.position.x = 2
-      camera.position.y = 5 * Math.sin(cameraAngle / 5)
-      camera.position.z = 5 + 5 * (cameraInitRotation / INITROTATION) + cameraAngle // distance
-      camera.lookAt(cameraAngle, cameraAngle, 0)
+    if (props.status === 'loading') {
+      if (isBGLoaded.value === true) {
+        const step = 0.002
+        cameraInitRotation += step
+        camera.rotateZ(step)
+        camera.rotateX(step * 2)
+        camera.position.x = 2
+        camera.position.y = 5 * Math.sin(cameraAngle / 5)
+        camera.position.z = 5 + 5 * (cameraInitRotation / INITROTATION) + cameraAngle // distance
+        camera.lookAt(cameraAngle, cameraAngle, 0)
+      }
     } else {
       camera.position.y = 5 * Math.sin(cameraAngle / 5)
       camera.position.z = 10 + cameraAngle
@@ -133,8 +138,6 @@ onMounted(() => {
 watch(
   () => props.city,
   (newValue, oldValue) => {
-
-
     camera.rotation.x = -INITROTATION
     camera.rotation.z = -INITROTATION / 2
     camera.position.z = 5
@@ -144,13 +147,15 @@ watch(
     cameraMoveUp = true
 
     console.log('city changed', newValue, oldValue)
-    isBGLoaded.value=false
+    isBGLoaded.value = false
     // remove old city texture and layer and load the new one:
     scene.remove(plane)
     texture = undefined
     material = undefined
-    
-    texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`, isBGLoaded.value=true)
+
+    texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`, () => {
+      isBGLoaded.value = true
+    })
     material = new THREE.MeshBasicMaterial({ map: texture, opacity: 0.9, transparent: true })
 
     plane.material = material

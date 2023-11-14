@@ -42,10 +42,10 @@ onMounted(() => {
 watch(
   () => city.value,
   () => {
-    status.value = 'loading'
-    setTimeout(() => {
-      status.value = 'displaying'
-    }, 4000)
+     status.value = 'loading'
+    // setTimeout(() => {
+    //   status.value = 'displaying'
+    // }, 6000)
   }
 )
 </script>
@@ -55,7 +55,7 @@ watch(
     <div class="container max-w-screen-xl mx-auto px-2">
       <div class="flex justify-between items-center gap-12 mb-8 mt-4">
         <div class="inline-block">
-          <div class="text-8xl grow-0 text-white relative z-10">HEATWAVES</div>
+          <div class="text-8xl font-black grow-0 text-white relative z-10 pointer-events-none">HEATWAVES</div>
           <div class="justify-between flex shrink font-bold text-2xl text-yellow-300 -mt-4">
             <div class="relative inline-block text-left">
               <button
@@ -150,18 +150,18 @@ watch(
             :maxWaves="maxWaves"
             v-if="status === 'displaying'"
           >
-            <template #title> When <span class="bg-yellow-300 text-black">my mother</span> was in her twenties </template>
+            <template #title> When <span class="bg-yellow-300 text-black">my mother</span> was in her thirties </template>
             <template #year> 1986 </template>
           </singleSineWave>
         </Transition>
         <Transition>
           <singleSineWave 
-          class="mt-8"
+          class="mt-12"
             :number="parseInt(rowGrandson45.value)"
             :maxWaves="maxWaves"
             v-if="status === 'displaying'"
           >
-            <template #title> When <span class="bg-yellow-300 text-black">my grandaughter</span> will be in her twenties </template>
+            <template #title> When <span class="bg-yellow-300 text-black">my grandaughter</span> will be in her thirties </template>
             <template #year>  </template>
             <template #scenario>  SCENARIO: <span class="bg-yellow-300 text-black"> RCP4.5 EMISIONS PEAKS AROUND 2040 </span></template>
           </singleSineWave>
@@ -192,7 +192,7 @@ watch(
                   class="w-full flex justify-center text-center snippet -my-12"
                 >
                   <div class="text-center mt-8 text-white">loading</div>
-                  <div class="stage text-center">
+                  <div class="stage -ml-10">
                     <div class="dot-pulse"></div>
                   </div>
                 </div>
@@ -234,7 +234,8 @@ watch(
 
       </div>
     </footer>
-    <bgMap :city="city" @rotation-finished="status = 'displaying'" :status="status"></bgMap>
+    <!--  -->
+    <bgMap :city="city"  :status="status" @rotation-finished="status = 'displaying'"></bgMap>
   </div>
 </template>
 
