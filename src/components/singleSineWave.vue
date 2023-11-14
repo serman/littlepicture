@@ -1,17 +1,26 @@
 <script setup>
 import p5 from 'p5'
-import { ref } from 'vue'
+import { nextTick, ref, onMounted, onUnmounted, watchEffect } from 'vue'
 import { useElementSize } from '@vueuse/core'
 
 const props = defineProps({
   number: {
     type: Number,
     default: 96
+  },
+  canvasHeight: {
+    type: Number,
+    default: 150
+  },
+  maxWaves: {
+    type: Number,
+    default: 10
   }
 })
 
+const canvasp5container = ref(null)
 const canvasp5 = ref(null)
-const { width } = useElementSize(canvasp5)
+const { width } = useElementSize(canvasp5container)
 
 const sketch = (s) => {
   let x = 100
@@ -19,46 +28,78 @@ const sketch = (s) => {
   let thetainc = s.random(0.03, 0.1)
   let theta2 = 0
   let theta2inc = s.random(0.01, 0.04)
+  let wavelength
   s.setup = () => {
-    s.createCanvas(width.value, 150, 'P2D', canvasp5.value)
+    s.frameRate(40) 
+    s.createCanvas(width.value, props.canvasHeight, 'P2D', canvasp5.value)
+    wavelength = width.value / props.maxWaves
   }
 
   s.draw = () => {
+    wavelength = width.value / props.maxWaves
     s.clear()
     theta += thetainc
     theta2 += theta2inc
-    
     // lets draw a sin wave
     s.noFill()
-    s.stroke(223,254,71,128)
-    s.beginShape()
+    s.strokeWeight(1.5)
+    s.stroke(242, 201, 76, 192)
     const numberofWaves = props.number
     const waveheight = s.height * 0.8
-    if (x < s.width) x += 10
-    for (let i = 0; i < x; i++) {
+    const millis = s.millis()
+    const wavesLength = numberofWaves * wavelength
+    const wavesInitPoint = (s.width - wavesLength) / 2
+
+    if (x < wavesInitPoint + numberofWaves * wavelength) x += 10
+
+    //  waveheight / 2 +
+    // (s.noise(i / 5, millis/100) * waveheight) / 6+
+
+    s.beginShape()
+    for (let i = 0; i < wavesInitPoint; i++) {
+      s.vertex(i, waveheight / 2 + (s.noise(i, millis / 200) * waveheight) / 8)
+    }
+    for (let i = wavesInitPoint; i < wavesInitPoint + wavesLength; i++) {
       s.vertex(
         i,
-        waveheight / 2 +
-          (s.noise(i / 5, 0.5) * waveheight) / 6 +
-          (s.sin(numberofWaves * (i / s.width) * 2 * Math.PI + theta) * waveheight) / 2
+        ( s.noise(i*100 , millis / 200) * waveheight) / 4 
+          +
+          waveheight / 2 + //offset to center
+          (s.sin(numberofWaves * (i / wavesLength) * 2 * Math.PI + theta) * waveheight) / 2
       )
+    }
+    for (let i = wavesInitPoint + wavesLength; i < s.width; i++) {
+      s.vertex(i, waveheight / 2 + (s.noise(i, millis / 200) * waveheight) / 8)
     }
     s.endShape()
   }
 }
 
-let myp5 = new p5(sketch)
+let p5instance = null
+
+onUnmounted(() => {
+  p5instance.remove()
+  p5instance = null
+})
+
+watchEffect(() => {
+  if (p5instance != null && width.value > 0 && props.canvasHeight > 0) {
+    p5instance.resizeCanvas(width.value, props.canvasHeight)
+  } else p5instance = new p5(sketch)
+})
 </script>
 
 <template>
   <div class="w-full">
-    <div class="bg-black/40 relative px-8 py-4 shadow-lg shadow-black/30 rounded-sm">
+    <div class="bg-black/50 relative px-8 py-4 shadow-lg shadow-black/30 rounded-sm">
       <div class="inner-content">
         <div class="flex justify-between w-full pb-4">
           <div class="text-yellow-300 font-bold text-lg"><slot name="year"></slot></div>
           <div class="uppercase"><slot name="title"> </slot></div>
         </div>
-        <canvas id="canvasp5" ref="canvasp5" class="w-full"> </canvas>
+        <div class="w-full" ref="canvasp5container">
+          <canvas ref="canvasp5" class="w-full"> </canvas>
+        </div>
 
         <div class="flex justify-between w-full pt-4">
           <div>
