@@ -1,7 +1,7 @@
 <script setup>
 //https://anvaka.github.io/city-roads/?q=barcelona%2C&areaId=3600347950
 import * as THREE from 'three'
-import { onMounted, watch } from 'vue'
+import { onMounted, watch,ref } from 'vue'
 import {
   BloomEffect,
   EffectComposer,
@@ -19,7 +19,7 @@ let geometry
 let texture
 let material
 let plane
-
+const isBGLoaded=ref(false)
 const props = defineProps({
   city: {
     type: String,
@@ -51,7 +51,9 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 geometry = new THREE.PlaneGeometry(20, 20)
-texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`)
+texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`, () => {
+  isBGLoaded.value=true
+})
 material = new THREE.MeshBasicMaterial({ map: texture, opacity: 0.9, transparent: true })
 
 plane = new THREE.Mesh(geometry, material)
@@ -92,7 +94,7 @@ onMounted(() => {
   function animate() {
     requestAnimationFrame(animate)
 
-    if (props.status === 'loading') {
+    if (props.status === 'loading' && isBGLoaded.value===true) {
       const step = 0.001
       cameraInitRotation += step
       camera.rotateZ(step)
@@ -142,12 +144,13 @@ watch(
     cameraMoveUp = true
 
     console.log('city changed', newValue, oldValue)
+    isBGLoaded.value=false
     // remove old city texture and layer and load the new one:
     scene.remove(plane)
     texture = undefined
     material = undefined
-
-    texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`)
+    
+    texture = new THREE.TextureLoader().load(`/${props.city.toLowerCase()}.png`, isBGLoaded.value=true)
     material = new THREE.MeshBasicMaterial({ map: texture, opacity: 0.9, transparent: true })
 
     plane.material = material
